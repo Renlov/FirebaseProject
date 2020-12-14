@@ -1,8 +1,10 @@
-package com.example.firebaseproject;
+package com.example.firebaseproject.Activity;
 
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.os.Bundle;
+
+import com.example.firebaseproject.R;
 
 public class MainActivity extends AppCompatActivity {
 
