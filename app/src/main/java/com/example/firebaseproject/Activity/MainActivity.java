@@ -16,6 +16,8 @@ import android.widget.ProgressBar;
 import com.example.firebaseproject.*;
 import com.example.firebaseproject.Model.Message;
 import com.example.firebaseproject.Adapter.*;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -32,10 +34,29 @@ public class MainActivity extends AppCompatActivity {
 
     private String userName;
 
+    FirebaseDatabase database;
+    DatabaseReference messagesDatabaseReference;
+    DatabaseReference usersDatabaseReference;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        //Подключаем базу данных по значению
+        //https://console.firebase.google.com/project/firstproject-6b914/database/firstproject-6b914-default-rtdb/data
+        database = FirebaseDatabase.getInstance();
+
+        //Создаем узел для данных
+        messagesDatabaseReference = database.getReference().child("messages");
+        usersDatabaseReference = database.getReference().child("users");
+
+        //Создаем значения для узла messages, Ключ - message1, Значение - Hello Firebase
+        messagesDatabaseReference.child("message1").setValue("Hello Firebase");
+        messagesDatabaseReference.child("message2").setValue("Hello world");
+
+        usersDatabaseReference.child("user1").setValue("Joe");
+        usersDatabaseReference.child("user2").setValue("Max");
 
         userName = "Unknown";
 
