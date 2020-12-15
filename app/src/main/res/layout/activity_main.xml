@@ -9,6 +9,7 @@
     tools:context=".Activity.MainActivity">
 
     <ListView
+        android:id="@+id/listView"
         android:layout_above="@+id/sendMessageLayout"
         android:divider="@android:color/transparent"
         tools:listitem="@layout/message_item"
@@ -23,7 +24,7 @@
         android:orientation="horizontal"
         android:layout_height="wrap_content">
 
-        <ImageView
+        <ImageButton
             android:background="@drawable/ic_baseline_add_photo_alternate_24"
             android:id="@+id/sendPhotoButton"
             android:layout_width="40dp"
@@ -38,12 +39,14 @@
         <Button
             android:id="@+id/sendMessageButton"
             android:text="Send"
+            android:enabled="false"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"/>
 
     </LinearLayout>
 
     <ProgressBar
+        android:id="@+id/progressBar"
         android:layout_centerHorizontal="true"
         android:layout_centerVertical="true"
         android:layout_width="wrap_content"
