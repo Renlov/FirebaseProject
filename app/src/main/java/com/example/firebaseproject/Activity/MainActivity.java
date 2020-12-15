@@ -36,7 +36,6 @@ public class MainActivity extends AppCompatActivity {
 
     FirebaseDatabase database;
     DatabaseReference messagesDatabaseReference;
-    DatabaseReference usersDatabaseReference;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -46,17 +45,7 @@ public class MainActivity extends AppCompatActivity {
         //Подключаем базу данных по значению
         //https://console.firebase.google.com/project/firstproject-6b914/database/firstproject-6b914-default-rtdb/data
         database = FirebaseDatabase.getInstance();
-
-        //Создаем узел для данных
         messagesDatabaseReference = database.getReference().child("messages");
-        usersDatabaseReference = database.getReference().child("users");
-
-        //Создаем значения для узла messages, Ключ - message1, Значение - Hello Firebase
-        messagesDatabaseReference.child("message1").setValue("Hello Firebase");
-        messagesDatabaseReference.child("message2").setValue("Hello world");
-
-        usersDatabaseReference.child("user1").setValue("Joe");
-        usersDatabaseReference.child("user2").setValue("Max");
 
         userName = "Unknown";
 
@@ -103,6 +92,15 @@ public class MainActivity extends AppCompatActivity {
         sendMessageButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                Message message = new Message();
+                message.setText(messageEditText.getText().toString());
+                message.setName(userName);
+                message.setImageUrl(null);
+
+                //Отправка данных в базу данных с авто. сген. коду
+                messagesDatabaseReference.push().setValue(message);
+
+                //Удаляем то, что писали до этого
                 messageEditText.setText("");
             }
         });
@@ -116,3 +114,25 @@ public class MainActivity extends AppCompatActivity {
 
     }
 }
+
+
+
+
+
+
+        /*
+        FirebaseDatabase database;
+        database = FirebaseDatabase.getInstance();
+        DatabaseReference usersDatabaseReference;
+        //Создаем узел для данных
+        messagesDatabaseReference = database.getReference().child("messages");
+        usersDatabaseReference = database.getReference().child("users");
+
+        //Создаем значения для узла messages, Ключ - message1, Значение - Hello Firebase
+        messagesDatabaseReference.child("message1").setValue("Hello Firebase");
+        messagesDatabaseReference.child("message2").setValue("Hello world");
+
+        usersDatabaseReference.child("user1").setValue("Joe");
+        usersDatabaseReference.child("user2").setValue("Max");
+        */
+
