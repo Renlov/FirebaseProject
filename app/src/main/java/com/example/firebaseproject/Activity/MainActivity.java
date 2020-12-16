@@ -1,5 +1,7 @@
 package com.example.firebaseproject.Activity;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.os.Bundle;
@@ -16,6 +18,9 @@ import android.widget.ProgressBar;
 import com.example.firebaseproject.*;
 import com.example.firebaseproject.Model.Message;
 import com.example.firebaseproject.Adapter.*;
+import com.google.firebase.database.ChildEventListener;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
@@ -37,6 +42,9 @@ public class MainActivity extends AppCompatActivity {
     FirebaseDatabase database;
     DatabaseReference messagesDatabaseReference;
 
+    //Слушатель событий в потомке Reference
+    ChildEventListener messagesChildEventListener;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -45,6 +53,7 @@ public class MainActivity extends AppCompatActivity {
         //Подключаем базу данных по значению
         //https://console.firebase.google.com/project/firstproject-6b914/database/firstproject-6b914-default-rtdb/data
         database = FirebaseDatabase.getInstance();
+        //Создаем узел для данных
         messagesDatabaseReference = database.getReference().child("messages");
 
         userName = "Unknown";
@@ -111,6 +120,38 @@ public class MainActivity extends AppCompatActivity {
 
             }
         });
+        //Инициализируем обработчик событий
+        messagesChildEventListener = new ChildEventListener() {
+            @Override
+            public void onChildAdded(@NonNull DataSnapshot snapshot, @Nullable String previousChildName) {
+                //Добавляется потомок
+                //DataSnapshot — это список текущих значений в одном каталоге
+                Message message = snapshot.getValue(Message.class);
+                adapter.add(message);
+            }
+
+            @Override
+            public void onChildChanged(@NonNull DataSnapshot snapshot, @Nullable String previousChildName) {
+                //Меняется потомок
+            }
+
+            @Override
+            public void onChildRemoved(@NonNull DataSnapshot snapshot) {
+                //Удаляется потомок
+            }
+
+            @Override
+            public void onChildMoved(@NonNull DataSnapshot snapshot, @Nullable String previousChildName) {
+                //Двигается потомок
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+                //Ошибка в базе данных
+            }
+        };
+
+        messagesDatabaseReference.addChildEventListener(messagesChildEventListener);
 
     }
 }
