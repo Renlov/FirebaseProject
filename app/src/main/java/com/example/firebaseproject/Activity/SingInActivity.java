@@ -3,6 +3,7 @@ package com.example.firebaseproject.Activity;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -74,5 +75,7 @@ public class SingInActivity extends AppCompatActivity {
                         // ...
                     }
                 });
+
+        startActivity(new Intent(SingInActivity.this, MainActivity.class));
     }
 }
