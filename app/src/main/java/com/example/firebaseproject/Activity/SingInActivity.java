@@ -23,6 +23,7 @@ public class SingInActivity extends AppCompatActivity {
 
     private FirebaseAuth auth;
     private static final String TAG = "SingInActivity";
+    private boolean loginModeActive;
 
     private EditText emailEditText;
     private EditText passwordEditText;
@@ -77,5 +78,18 @@ public class SingInActivity extends AppCompatActivity {
                 });
 
         startActivity(new Intent(SingInActivity.this, MainActivity.class));
+    }
+
+    public void toggleLoginMode(View view) {
+
+        if(loginModeActive){
+            loginModeActive = false;
+            loginSingUpButton.setText("Sing Up");
+            toggleLoginSingUpTextView.setText("Or, log In");
+        } else {
+            loginModeActive = true;
+            loginSingUpButton.setText("Log In");
+            toggleLoginSingUpTextView.setText("Or, sing Up ");
+        }
     }
 }
