@@ -54,6 +54,10 @@ public class SingInActivity extends AppCompatActivity {
                 passwordEditText.getText().toString().trim());
             }
         });
+        //Если пользователь залогинился, он будет сразу направлен в чат
+        if(auth.getCurrentUser() !=null){
+            startActivity(new Intent(SingInActivity.this, MainActivity.class));
+        }
     }
 
     private void loginSingUser(String email, String password) {
