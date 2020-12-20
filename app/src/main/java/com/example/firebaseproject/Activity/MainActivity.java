@@ -61,8 +61,12 @@ public class MainActivity extends AppCompatActivity {
         //Создаем узел для данных
         messagesDatabaseReference = database.getReference().child("messages");
 
-        userName = "Unknown";
-
+        Intent intent = getIntent();
+        if(intent!=null){
+            userName = intent.getStringExtra("userName");
+        } else {
+            userName = "Unknown";
+        }
         progressBar = findViewById(R.id.progressBar);
         sendImageButton = findViewById(R.id.sendPhotoButton);
         sendMessageButton = findViewById(R.id.sendMessageButton);
