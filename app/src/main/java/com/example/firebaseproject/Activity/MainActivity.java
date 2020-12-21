@@ -22,6 +22,7 @@ import android.widget.ProgressBar;
 import com.example.firebaseproject.*;
 import com.example.firebaseproject.Model.Message;
 import com.example.firebaseproject.Adapter.*;
+import com.example.firebaseproject.Model.User;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
@@ -46,9 +47,11 @@ public class MainActivity extends AppCompatActivity {
 
     FirebaseDatabase database;
     DatabaseReference messagesDatabaseReference;
-
     //Слушатель событий в потомке Reference
     ChildEventListener messagesChildEventListener;
+
+    DatabaseReference usersDatabaseReference;
+    ChildEventListener usersChildEventListener;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -60,6 +63,7 @@ public class MainActivity extends AppCompatActivity {
         database = FirebaseDatabase.getInstance();
         //Создаем узел для данных
         messagesDatabaseReference = database.getReference().child("messages");
+        usersDatabaseReference = database.getReference().child("users");
 
         Intent intent = getIntent();
         if(intent!=null){
@@ -129,6 +133,44 @@ public class MainActivity extends AppCompatActivity {
 
             }
         });
+
+        //Случаем узел пользователей
+        usersChildEventListener = new ChildEventListener() {
+            @Override
+            public void onChildAdded(@NonNull DataSnapshot snapshot, @Nullable String previousChildName) {
+                //Добавляется потомок
+                //DataSnapshot — это список текущих значений в одном каталоге
+
+                User user = snapshot.getValue(User.class);
+                //Отображаем имя пользователя
+                if(user.getId().equals(FirebaseAuth.getInstance().getCurrentUser().getUid())){
+                    userName = user.getName();
+                }
+            }
+
+            @Override
+            public void onChildChanged(@NonNull DataSnapshot snapshot, @Nullable String previousChildName) {
+
+            }
+
+            @Override
+            public void onChildRemoved(@NonNull DataSnapshot snapshot) {
+
+            }
+
+            @Override
+            public void onChildMoved(@NonNull DataSnapshot snapshot, @Nullable String previousChildName) {
+
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
+            }
+        };
+        usersDatabaseReference.addChildEventListener(usersChildEventListener);
+
+
         //Инициализируем обработчик событий
         messagesChildEventListener = new ChildEventListener() {
             @Override
