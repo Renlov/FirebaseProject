@@ -5,6 +5,7 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.InputFilter;
@@ -29,6 +30,8 @@ import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -54,6 +57,9 @@ public class MainActivity extends AppCompatActivity {
     DatabaseReference usersDatabaseReference;
     ChildEventListener usersChildEventListener;
 
+    FirebaseStorage storage;
+    StorageReference chatImagesStorageReference;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -62,9 +68,12 @@ public class MainActivity extends AppCompatActivity {
         //Подключаем базу данных по значению
         //https://console.firebase.google.com/project/firstproject-6b914/database/firstproject-6b914-default-rtdb/data
         database = FirebaseDatabase.getInstance();
+        storage = FirebaseStorage.getInstance();
         //Создаем узел для данных
         messagesDatabaseReference = database.getReference().child("messages");
         usersDatabaseReference = database.getReference().child("users");
+        chatImagesStorageReference = storage.getReference().child("chat_images");
+
 
         Intent intent = getIntent();
         if(intent!=null){
@@ -133,7 +142,8 @@ public class MainActivity extends AppCompatActivity {
             public void onClick(View v) {
                 //Создаем интенет для получения контента
                 Intent intent1 = new Intent(Intent.ACTION_GET_CONTENT);
-                intent1.setType("image/jpeg");
+                //Все типы изображений image/*, или тип image/jpeg
+                intent1.setType("image/*");
                 //Только с телефона
                 intent1.putExtra(Intent.EXTRA_LOCAL_ONLY, true);
                 startActivityForResult(Intent.createChooser(intent1, "Choose an image"),
@@ -230,6 +240,18 @@ public class MainActivity extends AppCompatActivity {
                 return true;
             default:
                 return super.onOptionsItemSelected(item);
+        }
+    }
+    //В результате будет адес изображение
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if(requestCode == RC_IMAGE && resultCode == RESULT_OK){
+            Uri selectedImageUri = data.getData();
+            //content://images/some/3 - последний элемент
+            StorageReference imageReference = chatImagesStorageReference.child(selectedImageUri
+            .getLastPathSegment());
+
         }
     }
 }
