@@ -44,6 +44,7 @@ public class MainActivity extends AppCompatActivity {
     private List<Message> messageList;
 
     private String userName;
+    private static final int RC_IMAGE = 111;
 
     FirebaseDatabase database;
     DatabaseReference messagesDatabaseReference;
@@ -130,6 +131,13 @@ public class MainActivity extends AppCompatActivity {
         sendImageButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                //Создаем интенет для получения контента
+                Intent intent1 = new Intent(Intent.ACTION_GET_CONTENT);
+                intent1.setType("image/jpeg");
+                //Только с телефона
+                intent1.putExtra(Intent.EXTRA_LOCAL_ONLY, true);
+                startActivityForResult(Intent.createChooser(intent1, "Choose an image"),
+                        RC_IMAGE);
 
             }
         });
