@@ -40,7 +40,7 @@ import com.google.firebase.storage.UploadTask;
 import java.util.ArrayList;
 import java.util.List;
 
-public class MainActivity extends AppCompatActivity {
+public class ChatActivity extends AppCompatActivity {
 
     private ListView messageListView;
     private Adapter adapter;
@@ -67,7 +67,7 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
+        setContentView(R.layout.activity_chat);
 
         //Подключаем базу данных по значению
         //https://console.firebase.google.com/project/firstproject-6b914/database/firstproject-6b914-default-rtdb/data
@@ -240,7 +240,7 @@ public class MainActivity extends AppCompatActivity {
         switch (item.getItemId()) {
             case R.id.sing_out:
                 FirebaseAuth.getInstance().signOut();
-                startActivity(new Intent(MainActivity.this, SingInActivity.class));
+                startActivity(new Intent(ChatActivity.this, SingInActivity.class));
                 return true;
             default:
                 return super.onOptionsItemSelected(item);
