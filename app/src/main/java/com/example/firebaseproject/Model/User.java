@@ -5,14 +5,16 @@ public class User {
     private String name;
     private String email;
     private String id;
+    private int avatarResource;
 
     public User() {
     }
 
-    public User(String name, String email, String id) {
+    public User(String name, String email, String id, int avatarResource) {
         this.name = name;
         this.email = email;
         this.id = id;
+        this.avatarResource = avatarResource;
     }
 
     public String getName() {
@@ -37,5 +39,13 @@ public class User {
 
     public void setId(String id) {
         this.id = id;
+    }
+
+    public int getAvatarResource() {
+        return avatarResource;
+    }
+
+    public void setAvatarResource(int avatarResource) {
+        this.avatarResource = avatarResource;
     }
 }
