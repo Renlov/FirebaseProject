@@ -29,6 +29,7 @@ public class UserListActivity extends AppCompatActivity {
 
     private DatabaseReference usersDatabaseReference;
     private ChildEventListener usersChildEventListener;
+    private FirebaseAuth auth;
 
     private ArrayList<User> userArrayList;
     private RecyclerView userRecyclerView;
@@ -41,6 +42,7 @@ public class UserListActivity extends AppCompatActivity {
         setContentView(R.layout.activity_user_list);
 
         userArrayList = new ArrayList<>();
+        auth = FirebaseAuth.getInstance();
 
         attachUserDatabaseReferenceListener();
         buildRecyclerView();
@@ -54,10 +56,12 @@ public class UserListActivity extends AppCompatActivity {
                 @Override
                 public void onChildAdded(@NonNull DataSnapshot snapshot, @Nullable String previousChildName) {
                     User user = snapshot.getValue(User.class);
-                    user.setAvatarResource(R.drawable.user_image);
-                    userArrayList.add(user);
-                    userAdapter.notifyDataSetChanged();
-
+                    //Если не равны строки, то создаем пользователя в списке, исключаем самого себя из списка
+                    if(!user.getId().equals(auth.getCurrentUser().getUid())) {
+                        user.setAvatarResource(R.drawable.user_image);
+                        userArrayList.add(user);
+                        userAdapter.notifyDataSetChanged();
+                    }
                 }
 
                 @Override
