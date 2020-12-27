@@ -56,6 +56,7 @@ public class UserListActivity extends AppCompatActivity {
                 @Override
                 public void onChildAdded(@NonNull DataSnapshot snapshot, @Nullable String previousChildName) {
                     User user = snapshot.getValue(User.class);
+
                     //Если не равны строки, то создаем пользователя в списке, исключаем самого себя из списка
                     if(!user.getId().equals(auth.getCurrentUser().getUid())) {
                         user.setAvatarResource(R.drawable.user_image);
