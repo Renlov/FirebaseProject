@@ -9,6 +9,7 @@ import android.view.MenuItem;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -100,6 +101,10 @@ public class UserListActivity extends AppCompatActivity {
 
         userRecyclerView = findViewById(R.id.userListRecyclerView);
         userRecyclerView.setHasFixedSize(true);
+
+        //Добавляе черту под каждого пользователя
+        userRecyclerView.addItemDecoration(new DividerItemDecoration(userRecyclerView.getContext(),
+                DividerItemDecoration.VERTICAL));
 
         userLayoutManager = new LinearLayoutManager(this);
         userAdapter = new UserAdapter(userArrayList);
