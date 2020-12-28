@@ -1,9 +1,5 @@
 package com.example.firebaseproject.Activity;
 
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import androidx.appcompat.app.AppCompatActivity;
-
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
@@ -20,10 +16,14 @@ import android.widget.ImageButton;
 import android.widget.ListView;
 import android.widget.ProgressBar;
 
-import com.example.firebaseproject.*;
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.appcompat.app.AppCompatActivity;
+
+import com.example.firebaseproject.Adapter.Adapter;
 import com.example.firebaseproject.Model.Message;
-import com.example.firebaseproject.Adapter.*;
 import com.example.firebaseproject.Model.User;
+import com.example.firebaseproject.R;
 import com.google.android.gms.tasks.Continuation;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
@@ -52,22 +52,36 @@ public class ChatActivity extends AppCompatActivity {
 
     private String userName;
     private static final int RC_IMAGE = 111;
+    private String recipientUserId;
+    private FirebaseAuth auth;
 
-    FirebaseDatabase database;
-    DatabaseReference messagesDatabaseReference;
+    private FirebaseDatabase database;
+    private DatabaseReference messagesDatabaseReference;
     //Слушатель событий в потомке Reference
-    ChildEventListener messagesChildEventListener;
+    private ChildEventListener messagesChildEventListener;
 
-    DatabaseReference usersDatabaseReference;
-    ChildEventListener usersChildEventListener;
+    private DatabaseReference usersDatabaseReference;
+    private ChildEventListener usersChildEventListener;
 
-    FirebaseStorage storage;
-    StorageReference chatImagesStorageReference;
+    private FirebaseStorage storage;
+    private StorageReference chatImagesStorageReference;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_chat);
+
+        auth = FirebaseAuth.getInstance();
+
+        Intent intent = getIntent();
+
+        if(intent!=null){
+            userName = intent.getStringExtra("userName");
+            recipientUserId = intent.getStringExtra("recipientUserId");
+        } else {
+            userName = "Unknown";
+        }
+
 
         //Подключаем базу данных по значению
         //https://console.firebase.google.com/project/firstproject-6b914/database/firstproject-6b914-default-rtdb/data
@@ -78,13 +92,6 @@ public class ChatActivity extends AppCompatActivity {
         usersDatabaseReference = database.getReference().child("users");
         chatImagesStorageReference = storage.getReference().child("chat_images");
 
-
-        Intent intent = getIntent();
-        if(intent!=null){
-            userName = intent.getStringExtra("userName");
-        } else {
-            userName = "Unknown";
-        }
         progressBar = findViewById(R.id.progressBar);
         sendImageButton = findViewById(R.id.sendPhotoButton);
         sendMessageButton = findViewById(R.id.sendMessageButton);
@@ -131,6 +138,8 @@ public class ChatActivity extends AppCompatActivity {
                 Message message = new Message();
                 message.setText(messageEditText.getText().toString());
                 message.setName(userName);
+                message.setSender(auth.getCurrentUser().getUid());
+                message.setRecipient(recipientUserId);
                 message.setImageUrl(null);
 
                 //Отправка данных в базу данных с авто. сген. коду
@@ -200,7 +209,12 @@ public class ChatActivity extends AppCompatActivity {
                 //Добавляется потомок
                 //DataSnapshot — это список текущих значений в одном каталоге
                 Message message = snapshot.getValue(Message.class);
-                adapter.add(message);
+
+                if(message.getSender().equals(auth.getCurrentUser().getUid()) &&
+                        message.getRecipient().equals(recipientUserId)) {
+
+                    adapter.add(message);
+                }
             }
 
             @Override

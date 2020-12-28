@@ -26,6 +26,7 @@ import java.util.ArrayList;
 
 public class UserListActivity extends AppCompatActivity {
 
+    private String userName;
 
     private DatabaseReference usersDatabaseReference;
     private ChildEventListener usersChildEventListener;
@@ -40,6 +41,11 @@ public class UserListActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_user_list);
+
+        Intent intent = getIntent();
+        if(intent != null) {
+            userName = intent.getStringExtra(userName);
+        }
 
         userArrayList = new ArrayList<>();
         auth = FirebaseAuth.getInstance();
@@ -101,7 +107,23 @@ public class UserListActivity extends AppCompatActivity {
         userRecyclerView.setLayoutManager(userLayoutManager);
         userRecyclerView.setAdapter(userAdapter);
 
+        //Установим интерфейс
+        userAdapter.setOnUserClickListener(new UserAdapter.onUserClickListener() {
+            @Override
+            public void onUserClick(int position) {
+                goToChat(position);
+            }
+        });
 
+
+    }
+
+    private void goToChat(int position) {
+        Intent intent = new Intent(UserListActivity.this, ChatActivity.class);
+        //Извлекаем ID пользователя
+        intent.putExtra("recipientUserId", userArrayList.get(position).getId());
+        intent.putExtra("userName", userName);
+        startActivity(intent);
     }
 
     @Override

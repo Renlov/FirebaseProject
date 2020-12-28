@@ -23,7 +23,7 @@ public class UserAdapter  extends RecyclerView.Adapter<UserAdapter.UserViewHolde
         void onUserClick(int position);
     }
 
-    public void SetOnUserClickListener(onUserClickListener listener){
+    public void setOnUserClickListener(onUserClickListener listener){
         this.listener = listener;
     }
 

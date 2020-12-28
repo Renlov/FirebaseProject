@@ -2,17 +2,37 @@ package com.example.firebaseproject.Model;
 
 public class Message {
 
-    String name;
-    String text;
-    String imageUrl;
+    private String name;
+    private String text;
+    private String imageUrl;
+    private String sender;
+    private String recipient;
 
     public Message() {
     }
 
-    public Message(String name, String text, String imageUrl) {
+    public Message(String name, String text, String imageUrl, String sender, String recipient) {
         this.name = name;
         this.text = text;
         this.imageUrl = imageUrl;
+        this.sender = sender;
+        this.recipient = recipient;
+    }
+
+    public String getSender() {
+        return sender;
+    }
+
+    public void setSender(String sender) {
+        this.sender = sender;
+    }
+
+    public String getRecipient() {
+        return recipient;
+    }
+
+    public void setRecipient(String recipient) {
+        this.recipient = recipient;
     }
 
     public String getName() {
