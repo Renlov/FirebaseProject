@@ -209,9 +209,12 @@ public class ChatActivity extends AppCompatActivity {
                 //Добавляется потомок
                 //DataSnapshot — это список текущих значений в одном каталоге
                 Message message = snapshot.getValue(Message.class);
-
+                //Чтобы было видно сообщение от разных пользователей
                 if(message.getSender().equals(auth.getCurrentUser().getUid()) &&
-                        message.getRecipient().equals(recipientUserId)) {
+                        message.getRecipient().equals(recipientUserId)  ||
+                        message.getRecipient().equals(auth.getCurrentUser().getUid()) &&
+                                message.getSender().equals(recipientUserId)
+                ) {
 
                     adapter.add(message);
                 }
@@ -292,6 +295,8 @@ public class ChatActivity extends AppCompatActivity {
                         Message message = new Message();
                         message.setImageUrl(downloadUri.toString());
                         message.setName(userName);
+                        message.setSender(auth.getCurrentUser().getUid());
+                        message.setRecipient(recipientUserId);
                         messagesDatabaseReference.push().setValue(message);
                     } else {
                         // Handle failures
