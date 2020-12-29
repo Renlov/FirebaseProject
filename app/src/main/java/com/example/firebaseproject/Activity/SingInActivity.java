@@ -160,7 +160,7 @@ public class SingInActivity extends AppCompatActivity {
     }
 
     public void toggleLoginMode(View view) {
-
+    //Реализация входа для варианта с имеющимся логином или для регистрации
         if(loginModeActive){
             loginModeActive = false;
             loginSingUpButton.setText("Sing Up");
