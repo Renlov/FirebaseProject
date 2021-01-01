@@ -1,7 +1,7 @@
 package com.example.firebaseproject.Adapter;
 
 import android.app.Activity;
-import android.content.Context;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
@@ -15,12 +15,27 @@ import com.example.firebaseproject.R;
 import java.util.List;
 
 public class Adapter extends ArrayAdapter<Message> {
-    public Adapter(Context context, int resource, List<Message> messageList) {
+
+    private List<Message> messages;
+    private Activity activity;
+
+    public Adapter(Activity context, int resource, List<Message> messageList) {
         super(context, resource, messageList);
+        this.messages = messageList;
+        this.activity = context;
     }
 
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
+
+        ViewHolder viewHolder;
+
+        LayoutInflater layoutInflater = (LayoutInflater)activity.getSystemService(Activity.LAYOUT_INFLATER_SERVICE);
+
+        Message message = getItem(position);
+        int layoutResource = 0;
+        int viewType = getItemViewType(position);
+
 
         if(convertView == null){
             convertView = ((Activity)getContext()).getLayoutInflater().inflate(R.layout.message_item,
@@ -31,7 +46,7 @@ public class Adapter extends ArrayAdapter<Message> {
         TextView textTextView = convertView.findViewById(R.id.textTextView);
         TextView nameTextView = convertView.findViewById(R.id.nameTextView);
 
-        Message message = getItem(position);
+        Message messageObject = getItem(position);
 
         boolean isText = message.getImageUrl() == null;
 
@@ -54,4 +69,32 @@ public class Adapter extends ArrayAdapter<Message> {
 
         return convertView;
     }
+
+    @Override
+    public int getItemViewType(int position) {
+
+        int flag;
+        Message message = messages.get(position);
+        if (message.isMine()){
+            flag = 0;
+        } else flag = 1;
+        return flag;
+    }
+
+    @Override
+    public int getViewTypeCount() {
+        return 2;
+    }
+
+    private class ViewHolder {
+
+        private ImageView photoImageView;
+        private TextView messageTextView;
+
+        public ViewHolder(View view){
+            photoImageView = view.findViewById(R.id.photoImageView);
+            messageTextView = view.findViewById(R.id.messageTextView);
+        }
+    }
+
 }
