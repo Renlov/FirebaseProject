@@ -128,6 +128,7 @@ public class UserListActivity extends AppCompatActivity {
         //Извлекаем ID пользователя
         intent.putExtra("recipientUserId", userArrayList.get(position).getId());
         intent.putExtra("userName", userName);
+        intent.putExtra("recipientUserName", userArrayList.get(position).getName());
         startActivity(intent);
     }
 

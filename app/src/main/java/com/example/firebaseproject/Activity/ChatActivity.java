@@ -54,6 +54,7 @@ public class ChatActivity extends AppCompatActivity {
     private static final int RC_IMAGE = 111;
     private String recipientUserId;
     private FirebaseAuth auth;
+    private String recipientUserName;
 
     private FirebaseDatabase database;
     private DatabaseReference messagesDatabaseReference;
@@ -78,9 +79,12 @@ public class ChatActivity extends AppCompatActivity {
         if(intent!=null){
             userName = intent.getStringExtra("userName");
             recipientUserId = intent.getStringExtra("recipientUserId");
+            recipientUserName = intent.getStringExtra("recipientUserName");
         } else {
             userName = "Unknown";
         }
+
+        setTitle(recipientUserName);
 
 
         //Подключаем базу данных по значению
